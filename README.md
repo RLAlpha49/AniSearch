@@ -1,36 +1,125 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AniSearch
+
+AniSearch is a web application built with Next.js that allows users to search for anime and manga using a description-based search. The models/embedding usable were generated using [AniSearchModel](https://github.com/RLAlpha49/AniSearchModel).
+
+## Table of Contents
+
+- [Getting Started](#getting-started)
+- [Features](#features)
+- [Project Structure](#project-structure)
+- [Contributing](#contributing)
+- [License](#license)
 
 ## Getting Started
 
-First, run the development server:
+To get started with AniSearch, follow these steps:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. Clone the repository:
+
+    ```bash
+    git clone https://github.com/RLAlpha49/AniSearch.git
+    cd AniSearch
+    ```
+
+2. Install dependencies:
+
+    ```bash
+    npm install
+    ```
+
+3. Start the development server:
+
+    ```bash
+    npm run dev
+    ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Features
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Anime and Manga Search: Search for anime and manga using various models.
+- Dark Mode: Toggle between light and dark themes.
+- Model Selection: Choose from a list of models for search.
+- Settings Dialog: Customize search settings, including results per page and default model.
 
-## Learn More
+## Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+```text
+AniSearch/
+├── src/
+│   ├── app/
+│   │   ├── fonts/
+│   │   │   ├── GeistMonoVF.woff
+│   │   │   └── GeistVF.woff
+│   │   ├── favicon.ico
+│   │   ├── globals.css
+│   │   ├── layout.tsx
+│   │   └── page.tsx
+│   ├── components/
+│   │   ├── common/
+│   │   │   ├── ErrorDisplay.tsx
+│   │   │   ├── LoadingIndicator.tsx
+│   │   │   └── SettingsDialog.tsx
+│   │   ├── layout/
+│   │   │   ├── DarkModeToggle.tsx
+│   │   │   └── Header.tsx
+│   │   ├── results/
+│   │   │   ├── AnimeCard.tsx
+│   │   │   ├── LoadMoreButton.tsx
+│   │   │   ├── MangaCard.tsx
+│   │   │   └── ResultsList.tsx
+│   │   ├── search/
+│   │   │   ├── ModelSelector.tsx
+│   │   │   ├── SearchBar.tsx
+│   │   │   ├── SearchInput.tsx
+│   │   │   └── SearchTypeSwitch.tsx
+│   │   ├── ui/
+│   │   │   ├── button.tsx
+│   │   │   ├── card.tsx
+│   │   │   ├── dialog.tsx
+│   │   │   ├── input.tsx
+│   │   │   ├── label.tsx
+│   │   │   ├── radio-group.tsx
+│   │   │   ├── select.tsx
+│   │   │   └── switch.tsx
+│   │   └── AniSearch.tsx
+│   ├── lib/
+│   │   └── utils.ts
+│   └── types/
+│       ├── props/
+│       │   ├── AnimeCard.ts
+│       │   ├── DarkModeToggle.ts
+│       │   ├── ErrorDisplay.ts
+│       │   ├── LoadingIndicator.ts
+│       │   ├── LoadMoreButton.ts
+│       │   ├── MangaCard.ts
+│       │   ├── ModelSelector.ts
+│       │   ├── ResultsList.ts
+│       │   ├── SearchBar.ts
+│       │   ├── SearchInput.ts
+│       │   ├── SearchTypeSwitch.ts
+│       │   └── SettingsDialog.ts
+│       ├── Anime.ts
+│       ├── Manga.ts
+│       └── Settings.ts
+├── .cursorignore
+├── .eslintrc.json
+├── .gitignore
+├── components.json
+├── LICENSE
+├── next.config.mjs
+├── package-lock.json
+├── package.json
+├── postcss.config.mjs
+├── README.md
+├── tailwind.config.ts
+└── tsconfig.json
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Contributing
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Contributions are welcome! Please fork the repository and submit a pull request for any changes.
 
-## Deploy on Vercel
+## License
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
