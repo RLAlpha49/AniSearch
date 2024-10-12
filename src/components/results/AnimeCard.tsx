@@ -1,29 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
-interface Anime {
-	anime_id: number;
-	title: string;
-	title_english?: string;
-	title_japanese?: string;
-	title_synonyms?: string | string[];
-	main_picture?: string;
-	synopsis: string;
-	score: number;
-	episodes?: number;
-	type?: string;
-	genres: string | string[];
-	themes: string | string[];
-	demographics?: string | string[];
-	similarity: number;
-	url: string;
-}
-
-interface AnimeCardProps {
-	anime: Anime;
-	isDarkMode: boolean;
-}
+import { AnimeCardProps } from "@/types/props/AnimeCard";
 
 export function AnimeCard({ anime, isDarkMode }: AnimeCardProps) {
 	const titleRef = useRef<HTMLDivElement>(null);

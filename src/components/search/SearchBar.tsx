@@ -1,12 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-
-interface SearchBarProps {
-	searchQuery: string;
-	setSearchQuery: (query: string) => void;
-	handleSearch: () => void;
-	isDarkMode: boolean;
-}
+import { SearchBarProps } from "@/types/props/SearchBar";
 
 export function SearchBar({
 	searchQuery,

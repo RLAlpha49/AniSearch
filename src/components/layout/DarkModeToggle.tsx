@@ -1,10 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Moon, Sun } from "lucide-react";
-
-interface DarkModeToggleProps {
-	isDarkMode: boolean;
-	toggleDarkMode: () => void;
-}
+import { DarkModeToggleProps } from "@/types/props/DarkModeToggle";
 
 export function DarkModeToggle({ isDarkMode, toggleDarkMode }: DarkModeToggleProps) {
 	return (

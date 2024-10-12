@@ -1,4 +1,4 @@
-import AniSearchComponent from "@/components/AniSearchComponent";
+import AniSearchComponent from "@/components/AniSearch";
 
 export default function Home() {
 	return (

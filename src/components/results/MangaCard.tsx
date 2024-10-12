@@ -1,31 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
-interface Manga {
-	manga_id: number;
-	title: string;
-	title_english?: string;
-	title_japanese?: string;
-	title_synonyms?: string | string[];
-	main_picture?: string;
-	synopsis: string;
-	score: number;
-	chapters?: number;
-	volumes?: number;
-	type?: string;
-	status?: string;
-	genres: string | string[];
-	themes: string | string[];
-	demographics?: string | string[];
-	similarity: number;
-	url: string;
-}
-
-interface MangaCardProps {
-	manga: Manga;
-	isDarkMode: boolean;
-}
+import { MangaCardProps } from "@/types/props/MangaCard";
 
 export function MangaCard({ manga, isDarkMode }: MangaCardProps) {
 	const titleRef = useRef<HTMLDivElement>(null);
