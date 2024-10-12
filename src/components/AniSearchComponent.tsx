@@ -277,7 +277,7 @@ export default function AniSearchComponent() {
 											? "bg-gray-800 text-white"
 											: "bg-white text-gray-900"
 									}
-									style={{ maxWidth: "90%" }}
+									style={{ maxWidth: "90%", width: "500px" }}
 								>
 									<DialogHeader>
 										<DialogTitle>Settings</DialogTitle>
