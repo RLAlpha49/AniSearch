@@ -176,7 +176,14 @@ export default function AniSearchComponent() {
 			}
 		} catch (error) {
 			console.error("Error fetching data:", error);
-			setError(`An error occurred while searching: ${error}`);
+
+			if (settings.endpoint === "https://model.alpha49.com/anisearchmodel/") {
+				setError(
+					"Unable to access the default endpoint. You can run the models locally by following the instructions at https://github.com/RLAlpha49/AniSearchModel."
+				);
+			} else {
+				setError(`An error occurred while searching: ${error}`);
+			}
 		} finally {
 			if (isLoadMore) {
 				setIsLoadingMore(false);
