@@ -3,4 +3,5 @@ export interface Settings {
 	pageTheme: string;
 	resultsPerPage: string;
 	customResultsPerPage: string;
+	endpoint: string;
 }

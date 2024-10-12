@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
 	Dialog,
 	DialogContent,
@@ -22,6 +22,16 @@ import { Input } from "@/components/ui/input";
 import { SettingsDialogProps } from "@/types/props/SettingsDialog";
 
 export function SettingsDialog({ isDarkMode, settings, setSettings, models }: SettingsDialogProps) {
+	const [endpointType, setEndpointType] = useState(() => {
+		if (settings.endpoint.startsWith("http://localhost")) {
+			return "localhost";
+		} else if (settings.endpoint === "") {
+			return "custom";
+		} else {
+			return "default";
+		}
+	});
+
 	return (
 		<Dialog>
 			<DialogTrigger asChild>
@@ -179,6 +189,74 @@ export function SettingsDialog({ isDarkMode, settings, setSettings, models }: Se
 									placeholder="Enter custom number"
 									className="mt-2"
 									min="1"
+								/>
+							)}
+						</div>
+					</div>
+					<div className="flex items-center gap-4">
+						<Label htmlFor="endpoint" className="w-1/4 text-right">
+							Model Endpoint
+						</Label>
+						<div className="flex-grow">
+							<Select
+								value={endpointType}
+								onValueChange={(value) => {
+									setEndpointType(value);
+									if (value === "custom") {
+										setSettings((prev) => ({
+											...prev,
+											endpoint: "",
+										}));
+									} else if (value === "localhost") {
+										setSettings((prev) => ({
+											...prev,
+											endpoint: "http://localhost:5000/anisearchmodel/",
+										}));
+									} else {
+										setSettings((prev) => ({
+											...prev,
+											endpoint: "https://model.alpha49.com/anisearchmodel/",
+										}));
+									}
+								}}
+							>
+								<SelectTrigger>
+									<SelectValue placeholder="Select endpoint" />
+								</SelectTrigger>
+								<SelectContent>
+									<SelectItem value="default">Remote (Default)</SelectItem>
+									<SelectItem value="localhost">Localhost</SelectItem>
+									<SelectItem value="custom">Custom</SelectItem>
+								</SelectContent>
+							</Select>
+							{endpointType === "localhost" && (
+								<Input
+									type="number"
+									value={settings.endpoint.split(":")[2]?.split("/")[0] || "5000"}
+									onChange={(e) => {
+										const port = e.target.value || "5000";
+										setSettings((prev) => ({
+											...prev,
+											endpoint: `http://localhost:${port}/anisearchmodel/`,
+										}));
+									}}
+									placeholder="Enter port number"
+									className="mt-2"
+									min="1"
+								/>
+							)}
+							{endpointType === "custom" && (
+								<Input
+									type="text"
+									value={settings.endpoint}
+									onChange={(e) =>
+										setSettings((prev) => ({
+											...prev,
+											endpoint: e.target.value,
+										}))
+									}
+									placeholder="https://example.com/anisearchmodel/"
+									className="mt-2"
 								/>
 							)}
 						</div>

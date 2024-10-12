@@ -56,6 +56,7 @@ export default function AniSearchComponent() {
 						pageTheme: "system",
 						resultsPerPage: "6",
 						customResultsPerPage: "",
+						endpoint: "https://model.alpha49.com/anisearchmodel/",
 				  };
 		}
 		return {
@@ -63,6 +64,7 @@ export default function AniSearchComponent() {
 			pageTheme: "system",
 			resultsPerPage: "6",
 			customResultsPerPage: "",
+			endpoint: "https://model.alpha49.com/anisearchmodel/",
 		};
 	});
 
@@ -143,7 +145,7 @@ export default function AniSearchComponent() {
 			}
 			setError(null);
 			const endpoint = isAnimeSearch ? "anime" : "manga";
-			const response = await fetch(`http://localhost:5000/anisearchmodel/${endpoint}`, {
+			const response = await fetch(`${settings.endpoint}${endpoint}`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
