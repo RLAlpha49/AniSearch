@@ -210,7 +210,7 @@ export function SettingsDialog({ isDarkMode, settings, setSettings, models }: Se
 									} else if (value === "localhost") {
 										setSettings((prev) => ({
 											...prev,
-											endpoint: "http://localhost:5000/anisearchmodel/",
+											endpoint: "http://localhost:21493/anisearchmodel/",
 										}));
 									} else {
 										setSettings((prev) => ({
@@ -232,9 +232,9 @@ export function SettingsDialog({ isDarkMode, settings, setSettings, models }: Se
 							{endpointType === "localhost" && (
 								<Input
 									type="number"
-									value={settings.endpoint.split(":")[2]?.split("/")[0] || "5000"}
+									value={settings.endpoint.split(":")[2]?.split("/")[0] || "21493"}
 									onChange={(e) => {
-										const port = e.target.value || "5000";
+										const port = e.target.value || "21493";
 										setSettings((prev) => ({
 											...prev,
 											endpoint: `http://localhost:${port}/anisearchmodel/`,
