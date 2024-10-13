@@ -16,7 +16,8 @@ export function ModelSelector({
 	models,
 	isDarkMode,
 	changeModel,
-}: ModelSelectorProps) {
+	defaultModel,
+}: ModelSelectorProps & { defaultModel: string }) {
 	return (
 		<div className="flex items-center gap-1.5 mb-4">
 			<Button
@@ -38,7 +39,7 @@ export function ModelSelector({
 				<SelectContent>
 					{models.map((model) => (
 						<SelectItem key={model} value={model}>
-							{model}
+							{model === defaultModel ? `${model} (Default)` : model}
 						</SelectItem>
 					))}
 				</SelectContent>

@@ -216,6 +216,7 @@ export default function AniSearchComponent() {
 						models={models}
 						isDarkMode={isDarkMode}
 						changeModel={changeModel}
+						defaultModel={settings.defaultModel}
 					/>
 					<SearchInput
 						searchQuery={searchQuery}

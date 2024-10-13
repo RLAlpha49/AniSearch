@@ -16,4 +16,5 @@ export interface Manga {
 	demographics?: string | string[];
 	similarity: number;
 	url: string;
+	start_date?: string;
 }

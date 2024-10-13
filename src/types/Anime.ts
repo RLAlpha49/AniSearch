@@ -14,4 +14,7 @@ export interface Anime {
     demographics?: string | string[];
     similarity: number;
 	url: string;
+	start_year?: number;
+	start_season?: string;
+	status?: string;
 }
