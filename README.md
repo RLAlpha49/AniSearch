@@ -90,12 +90,13 @@ AniSearch/
 │       │   ├── AnimeCard.ts
 │       │   ├── DarkModeToggle.ts
 │       │   ├── ErrorDisplay.ts
+│       │   ├── Header.ts
+│       │   ├── InfoItem.ts
 │       │   ├── LoadingIndicator.ts
 │       │   ├── LoadMoreButton.ts
 │       │   ├── MangaCard.ts
 │       │   ├── ModelSelector.ts
 │       │   ├── ResultsList.ts
-│       │   ├── SearchBar.ts
 │       │   ├── SearchInput.ts
 │       │   ├── SearchTypeSwitch.ts
 │       │   └── SettingsDialog.ts
