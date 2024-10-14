@@ -57,7 +57,11 @@ export function MangaSpecificFilters({ filters, handleFilterChange, isDarkMode }
 			</div>
 
 			<div>
-				<Label className={`${isDarkMode ? "text-gray-300" : "text-gray-700"} mb-2`}>
+				<Label
+					className={`${
+						isDarkMode ? "text-gray-300" : "text-gray-700"
+					} mb-2 flex items-center`}
+				>
 					<BookOpen className="w-4 h-4 mr-2 text-purple-500" />
 					Chapters Range
 				</Label>
@@ -109,7 +113,11 @@ export function MangaSpecificFilters({ filters, handleFilterChange, isDarkMode }
 			</div>
 
 			<div>
-				<Label className={`${isDarkMode ? "text-gray-300" : "text-gray-700"} mb-2`}>
+				<Label
+					className={`${
+						isDarkMode ? "text-gray-300" : "text-gray-700"
+					} mb-2 flex items-center`}
+				>
 					<Layers className="w-4 h-4 mr-2 text-red-500" />
 					Volumes Range
 				</Label>
