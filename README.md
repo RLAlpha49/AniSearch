@@ -65,8 +65,15 @@ AniSearch/
 │   │   │   ├── Header.tsx
 │   │   │   └── MultiSelect.tsx
 │   │   ├── results/
+│   │   │   ├── Filter/
+│   │   │   │   ├── AnimeSpecificFilters.tsx
+│   │   │   │   ├── FilterNotice.tsx
+│   │   │   │   ├── IgnoreNAFilter.tsx
+│   │   │   │   ├── MangaSpecificFilters.tsx
+│   │   │   │   ├── MultiSelectFilter.tsx
+│   │   │   │   ├── ScoreRangeFilter.tsx
+│   │   │   │   └── StartYearRangeFilter.tsx
 │   │   │   ├── AnimeCard.tsx
-│   │   │   ├── FilterOptions.tsx
 │   │   │   ├── LoadMoreButton.tsx
 │   │   │   ├── MangaCard.tsx
 │   │   │   └── ResultsList.tsx
@@ -99,6 +106,7 @@ AniSearch/
 │       │   ├── AnimeCard.ts
 │       │   ├── DarkModeToggle.ts
 │       │   ├── ErrorDisplay.ts
+│       │   ├── Filter.ts
 │       │   ├── FilterOptions.ts
 │       │   ├── Header.ts
 │       │   ├── InfoItem.ts

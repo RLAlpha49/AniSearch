@@ -4,7 +4,11 @@ export interface Filters {
 	genres: string[];
 	themes: string[];
 	demographics: string[];
-	status?: string;
-	type?: string;
+	status: string[] | string;
+	type: string[] | string;
 	ignoreNA: boolean;
+	startSeason: string[] | string;
+	chaptersRange: number[] | [number, number];
+	volumesRange: number[] | [number, number];
+	episodesRange: number[][];
 }

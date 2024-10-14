@@ -13,7 +13,7 @@ import { Anime } from "@/types/Anime";
 import { Manga } from "@/types/Manga";
 import { Settings } from "@/types/Settings";
 import { Filters } from "@/types/Filters";
-import { FilterOptions } from "./results/FilterOptions";
+import { FilterOptions } from "./results/filter/FilterOptions";
 
 const models = [
 	"all-distilroberta-v1",
@@ -230,10 +230,17 @@ export default function AniSearchComponent() {
 			if (!filters.ignoreNA) {
 				if (
 					score === 0 ||
+					score === null ||
 					startYear === null ||
 					itemGenres.length === 0 ||
 					itemThemes.length === 0 ||
-					itemDemographics.length === 0
+					itemDemographics.length === 0 ||
+					(isAnimeSearch &&
+						((item as Anime).episodes === 0 || (item as Anime).episodes === null)) ||
+					(!isAnimeSearch &&
+						((item as Manga).chapters === 0 || (item as Manga).chapters === null)) ||
+					(!isAnimeSearch &&
+						((item as Manga).volumes === 0 || (item as Manga).volumes === null))
 				) {
 					return false;
 				}
@@ -246,7 +253,7 @@ export default function AniSearchComponent() {
 			)
 				return false;
 
-			// Case-insensitive comparison
+			// Case-insensitive comparison for genres, themes, and demographics
 			if (
 				filters.genres.length > 0 &&
 				!filters.genres.some((genre: string) =>
@@ -276,8 +283,62 @@ export default function AniSearchComponent() {
 				return false;
 			}
 
-			if (filters.status && item.status !== filters.status) return false;
-			if (filters.type && item.type !== filters.type) return false;
+			// Handle multiple selections for startSeason, status, and type
+			if (
+				Array.isArray(filters.startSeason) &&
+				filters.startSeason.length > 0 &&
+				!filters.startSeason.some(
+					(season: string) =>
+						(item as Anime).start_season?.toLowerCase() === season.toLowerCase()
+				)
+			) {
+				return false;
+			}
+
+			if (
+				Array.isArray(filters.status) &&
+				filters.status.length > 0 &&
+				!filters.status.some(
+					(status: string) => item.status?.toLowerCase() === status.toLowerCase()
+				)
+			) {
+				return false;
+			}
+
+			if (
+				Array.isArray(filters.type) &&
+				filters.type.length > 0 &&
+				!filters.type.some(
+					(type: string) => item.type?.toLowerCase() === type.toLowerCase()
+				)
+			) {
+				return false;
+			}
+
+			// Check episodes range for Anime
+			if (isAnimeSearch) {
+				const episodes = (item as Anime).episodes || 0;
+				const [minEpisodes, maxEpisodes] = filters.episodesRange[0];
+				if (episodes < minEpisodes || episodes > maxEpisodes) {
+					return false;
+				}
+			}
+
+			// Check chapters and volumes range for Manga
+			if (!isAnimeSearch) {
+				const chapters = (item as Manga).chapters || 0;
+				const volumes = (item as Manga).volumes || 0;
+				const [minChapters, maxChapters] = filters.chaptersRange;
+				const [minVolumes, maxVolumes] = filters.volumesRange;
+
+				if (chapters < minChapters || chapters > maxChapters) {
+					return false;
+				}
+
+				if (volumes < minVolumes || volumes > maxVolumes) {
+					return false;
+				}
+			}
 
 			return true;
 		});
