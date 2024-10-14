@@ -12,6 +12,8 @@ import { LoadingIndicator } from "./common/LoadingIndicator";
 import { Anime } from "@/types/Anime";
 import { Manga } from "@/types/Manga";
 import { Settings } from "@/types/Settings";
+import { Filters } from "@/types/Filters";
+import { FilterOptions } from "./results/FilterOptions";
 
 const models = [
 	"all-distilroberta-v1",
@@ -36,16 +38,17 @@ const models = [
 ];
 
 export default function AniSearchComponent() {
-	const [searchQuery, setSearchQuery] = useState("");
+	const [searchQuery, setSearchQuery] = useState<string>("");
 	const [animeResults, setAnimeResults] = useState<Anime[]>([]);
 	const [mangaResults, setMangaResults] = useState<Manga[]>([]);
-	const [isDarkMode, setIsDarkMode] = useState(false);
-	const [isAnimeSearch, setIsAnimeSearch] = useState(true);
-	const [currentModel, setCurrentModel] = useState("");
-	const [isLoading, setIsLoading] = useState(false);
-	const [isLoadingMore, setIsLoadingMore] = useState(false);
+	const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
+	const [isAnimeSearch, setIsAnimeSearch] = useState<boolean>(true);
+	const [currentModel, setCurrentModel] = useState<string>("");
+	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const [isLoadingMore, setIsLoadingMore] = useState<boolean>(false);
+	const [filteredResults, setFilteredResults] = useState<Anime[] | Manga[]>([]);
 	const [error, setError] = useState<string | null>(null);
-	const [page, setPage] = useState(1);
+	const [page, setPage] = useState<number>(1);
 	const [settings, setSettings] = useState<Settings>(() => {
 		if (typeof window !== "undefined") {
 			const savedSettings = localStorage.getItem("aniSearchSettings");
@@ -193,6 +196,95 @@ export default function AniSearchComponent() {
 		}
 	};
 
+	useEffect(() => {
+		// Initialize filteredResults with all results initially
+		setFilteredResults(isAnimeSearch ? animeResults : mangaResults);
+	}, [animeResults, mangaResults, isAnimeSearch]);
+
+	const handleFilterChange = (filters: Filters) => {
+		const results = isAnimeSearch ? animeResults : mangaResults;
+		const filtered = results.filter((item: Anime | Manga) => {
+			const score = item.score || 0;
+			const startYear = isAnimeSearch
+				? (item as Anime).start_year
+				: (item as Manga).start_date
+				? new Date((item as Manga).start_date!).getFullYear()
+				: null;
+
+			// Convert string representation of arrays to actual arrays
+			const parseArray = (str: string | string[]) => {
+				if (Array.isArray(str)) return str;
+				try {
+					return JSON.parse(str.replace(/'/g, '"'));
+				} catch (e) {
+					console.error("Failed to parse array:", str, e);
+					return [];
+				}
+			};
+
+			const itemGenres = item.genres ? parseArray(item.genres) : [];
+			const itemThemes = item.themes ? parseArray(item.themes) : [];
+			const itemDemographics = item.demographics ? parseArray(item.demographics) : [];
+
+			// Check each filter condition, considering the ignoreNA option
+			if (!filters.ignoreNA) {
+				if (
+					score === 0 ||
+					startYear === null ||
+					itemGenres.length === 0 ||
+					itemThemes.length === 0 ||
+					itemDemographics.length === 0
+				) {
+					return false;
+				}
+			}
+
+			if (score < filters.scoreRange[0] || score > filters.scoreRange[1]) return false;
+			if (
+				startYear &&
+				(startYear < filters.startYearRange[0] || startYear > filters.startYearRange[1])
+			)
+				return false;
+
+			// Case-insensitive comparison
+			if (
+				filters.genres.length > 0 &&
+				!filters.genres.some((genre: string) =>
+					itemGenres.map((g: string) => g.toLowerCase()).includes(genre.toLowerCase())
+				)
+			) {
+				return false;
+			}
+
+			if (
+				filters.themes.length > 0 &&
+				!filters.themes.some((theme: string) =>
+					itemThemes.map((t: string) => t.toLowerCase()).includes(theme.toLowerCase())
+				)
+			) {
+				return false;
+			}
+
+			if (
+				filters.demographics.length > 0 &&
+				!filters.demographics.some((demo: string) =>
+					itemDemographics
+						.map((d: string) => d.toLowerCase())
+						.includes(demo.toLowerCase())
+				)
+			) {
+				return false;
+			}
+
+			if (filters.status && item.status !== filters.status) return false;
+			if (filters.type && item.type !== filters.type) return false;
+
+			return true;
+		});
+
+		setFilteredResults(filtered as Anime[] | Manga[]);
+	};
+
 	return (
 		<div className={`min-h-screen transition-colors duration-300 ${isDarkMode ? "dark" : ""}`}>
 			<div className={`min-h-screen ${isDarkMode ? "bg-gray-900" : "bg-gray-100"}`}>
@@ -227,11 +319,16 @@ export default function AniSearchComponent() {
 						isDarkMode={isDarkMode}
 						isAnimeSearch={isAnimeSearch}
 					/>
+					<FilterOptions
+						isAnimeSearch={isAnimeSearch}
+						isDarkMode={isDarkMode}
+						onFilterChange={handleFilterChange}
+					/>
 					<ErrorDisplay error={error} />
 					<ResultsList
 						isAnimeSearch={isAnimeSearch}
-						animeResults={animeResults}
-						mangaResults={mangaResults}
+						animeResults={filteredResults as Anime[]}
+						mangaResults={filteredResults as Manga[]}
 						isDarkMode={isDarkMode}
 					/>
 					<LoadingIndicator

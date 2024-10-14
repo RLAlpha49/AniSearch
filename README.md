@@ -62,9 +62,11 @@ AniSearch/
 │   │   │   └── SettingsDialog.tsx
 │   │   ├── layout/
 │   │   │   ├── DarkModeToggle.tsx
-│   │   │   └── Header.tsx
+│   │   │   ├── Header.tsx
+│   │   │   └── MultiSelect.tsx
 │   │   ├── results/
 │   │   │   ├── AnimeCard.tsx
+│   │   │   ├── FilterOptions.tsx
 │   │   │   ├── LoadMoreButton.tsx
 │   │   │   ├── MangaCard.tsx
 │   │   │   └── ResultsList.tsx
@@ -74,13 +76,20 @@ AniSearch/
 │   │   │   ├── SearchInput.tsx
 │   │   │   └── SearchTypeSwitch.tsx
 │   │   ├── ui/
+│   │   │   ├── accordion.tsx
+│   │   │   ├── badge.tsx
 │   │   │   ├── button.tsx
 │   │   │   ├── card.tsx
+│   │   │   ├── checkbox.tsx
+│   │   │   ├── command.tsx
 │   │   │   ├── dialog.tsx
 │   │   │   ├── input.tsx
 │   │   │   ├── label.tsx
+│   │   │   ├── popover.tsx
 │   │   │   ├── radio-group.tsx
 │   │   │   ├── select.tsx
+│   │   │   ├── separator.tsx
+│   │   │   ├── slider.tsx
 │   │   │   └── switch.tsx
 │   │   └── AniSearch.tsx
 │   ├── lib/
@@ -90,6 +99,7 @@ AniSearch/
 │       │   ├── AnimeCard.ts
 │       │   ├── DarkModeToggle.ts
 │       │   ├── ErrorDisplay.ts
+│       │   ├── FilterOptions.ts
 │       │   ├── Header.ts
 │       │   ├── InfoItem.ts
 │       │   ├── LoadingIndicator.ts
@@ -101,6 +111,7 @@ AniSearch/
 │       │   ├── SearchTypeSwitch.ts
 │       │   └── SettingsDialog.ts
 │       ├── Anime.ts
+│       ├── Filters.ts
 │       ├── Manga.ts
 │       └── Settings.ts
 ├── .cursorignore
