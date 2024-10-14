@@ -1,14 +1,8 @@
 import React from "react";
 import { Label } from "@/components/ui/label";
-import {
-	Select,
-	SelectContent,
-	SelectValue,
-	SelectTrigger,
-	SelectItem,
-} from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import { FilterProps } from "@/types/props/Filter";
+import { MultiSelect } from "@/components/layout/multi-select";
 
 export function MangaSpecificFilters({ filters, handleFilterChange, isDarkMode }: FilterProps) {
 	return (
@@ -17,41 +11,36 @@ export function MangaSpecificFilters({ filters, handleFilterChange, isDarkMode }
 				<Label className={`${isDarkMode ? "text-gray-300" : "text-gray-700"}`}>
 					Status
 				</Label>
-				<Select onValueChange={(value) => handleFilterChange("status", value)}>
-					<SelectTrigger
-						className={`w-[250px] ${
-							isDarkMode ? "bg-gray-800 text-white" : "bg-white text-gray-900"
-						}`}
-					>
-						<SelectValue placeholder="Select status" />
-					</SelectTrigger>
-					<SelectContent>
-						<SelectItem value="finished">Finished</SelectItem>
-						<SelectItem value="currently_publishing">Currently Publishing</SelectItem>
-						<SelectItem value="on_hiatus">On Hiatus</SelectItem>
-					</SelectContent>
-				</Select>
+				<MultiSelect
+					options={[
+						{ label: "Finished", value: "finished" },
+						{ label: "Currently Publishing", value: "currently_publishing" },
+						{ label: "On Hiatus", value: "on_hiatus" },
+					]}
+					onValueChange={(value) => handleFilterChange("status", value)}
+					defaultValue={filters?.status}
+					placeholder="Select status"
+					className={`${
+						isDarkMode ? "bg-gray-800 text-white" : "bg-white text-gray-900"
+					}`}
+				/>
 			</div>
-
 			<div>
 				<Label className={`${isDarkMode ? "text-gray-300" : "text-gray-700"}`}>Type</Label>
-				<Select onValueChange={(value) => handleFilterChange("type", value)}>
-					<SelectTrigger
-						className={`w-[250px] ${
-							isDarkMode ? "bg-gray-800 text-white" : "bg-white text-gray-900"
-						}`}
-					>
-						<SelectValue placeholder="Select type" />
-					</SelectTrigger>
-					<SelectContent>
-						<SelectItem value="manga">Manga</SelectItem>
-						<SelectItem value="manhwa">Manhwa</SelectItem>
-						<SelectItem value="manhua">Manhua</SelectItem>
-						<SelectItem value="light_novel">Light Novel</SelectItem>
-						<SelectItem value="one_shot">One Shot</SelectItem>
-						<SelectItem value="doujinshi">Doujinshi</SelectItem>
-					</SelectContent>
-				</Select>
+				<MultiSelect
+					options={[
+						{ label: "Manga", value: "manga" },
+						{ label: "Manhwa", value: "manhwa" },
+						{ label: "Manhua", value: "manhua" },
+						{ label: "Light Novel", value: "light_novel" },
+						{ label: "One Shot", value: "one_shot" },
+						{ label: "Doujinshi", value: "doujinshi" },
+					]}
+					onValueChange={(value) => handleFilterChange("type", value)}
+					defaultValue={filters?.type}
+					placeholder="Select type"
+					className={`${isDarkMode ? "bg-gray-800 text-white" : "bg-white text-black"}`}
+				/>
 			</div>
 
 			<div>
