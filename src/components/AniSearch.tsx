@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Header } from "./layout/Header";
 import { LoadMoreButton } from "./results/LoadMoreButton";
 import { ModelSelector } from "./search/ModelSelector";
@@ -69,6 +69,23 @@ export default function AniSearchComponent() {
 			customResultsPerPage: "",
 			endpoint: "https://model.alpha49.com/anisearchmodel/",
 		};
+	});
+	const [currentFilters, setCurrentFilters] = useState<Filters>({
+		scoreRange: [0, 10],
+		startYearRange: [1917, 2025],
+		genres: [] as string[],
+		themes: [] as string[],
+		demographics: [] as string[],
+		status: [] as string[],
+		type: [] as string[],
+		episodesRange: [
+			[0, 3057],
+			[0, 110],
+		],
+		chaptersRange: [0, 6477],
+		volumesRange: [0, 200],
+		startSeason: [] as string[],
+		ignoreNA: true,
 	});
 
 	useEffect(() => {
@@ -201,150 +218,161 @@ export default function AniSearchComponent() {
 		setFilteredResults(isAnimeSearch ? animeResults : mangaResults);
 	}, [animeResults, mangaResults, isAnimeSearch]);
 
-	const handleFilterChange = (filters: Filters) => {
-		const results = isAnimeSearch ? animeResults : mangaResults;
-		const filtered = results.filter((item: Anime | Manga) => {
-			const score = item.score || 0;
-			const startYear = isAnimeSearch
-				? (item as Anime).start_year
-				: (item as Manga).start_date
-				? new Date((item as Manga).start_date!).getFullYear()
-				: null;
+	const handleFilterChange = useCallback(
+		(filters: Filters) => {
+			setCurrentFilters(filters);
+			const results = isAnimeSearch ? animeResults : mangaResults;
+			const filtered = results.filter((item: Anime | Manga) => {
+				const score = item.score || 0;
+				const startYear = isAnimeSearch
+					? (item as Anime).start_year
+					: (item as Manga).start_date
+					? new Date((item as Manga).start_date!).getFullYear()
+					: null;
 
-			// Convert string representation of arrays to actual arrays
-			const parseArray = (str: string | string[]) => {
-				if (Array.isArray(str)) return str;
-				try {
-					return JSON.parse(str.replace(/'/g, '"'));
-				} catch (e) {
-					console.error("Failed to parse array:", str, e);
-					return [];
+				// Convert string representation of arrays to actual arrays
+				const parseArray = (str: string | string[]) => {
+					if (Array.isArray(str)) return str;
+					try {
+						return JSON.parse(str.replace(/'/g, '"'));
+					} catch (e) {
+						console.error("Failed to parse array:", str, e);
+						return [];
+					}
+				};
+
+				const itemGenres = item.genres ? parseArray(item.genres) : [];
+				const itemThemes = item.themes ? parseArray(item.themes) : [];
+				const itemDemographics = item.demographics ? parseArray(item.demographics) : [];
+
+				// Check each filter condition, considering the ignoreNA option
+				if (!filters.ignoreNA) {
+					if (
+						score === 0 ||
+						score === null ||
+						startYear === null ||
+						itemGenres.length === 0 ||
+						itemThemes.length === 0 ||
+						itemDemographics.length === 0 ||
+						(isAnimeSearch &&
+							((item as Anime).episodes === 0 ||
+								(item as Anime).episodes === null)) ||
+						(!isAnimeSearch &&
+							((item as Manga).chapters === 0 ||
+								(item as Manga).chapters === null)) ||
+						(!isAnimeSearch &&
+							((item as Manga).volumes === 0 || (item as Manga).volumes === null))
+					) {
+						return false;
+					}
 				}
-			};
 
-			const itemGenres = item.genres ? parseArray(item.genres) : [];
-			const itemThemes = item.themes ? parseArray(item.themes) : [];
-			const itemDemographics = item.demographics ? parseArray(item.demographics) : [];
-
-			// Check each filter condition, considering the ignoreNA option
-			if (!filters.ignoreNA) {
+				if (score < filters.scoreRange[0] || score > filters.scoreRange[1]) return false;
 				if (
-					score === 0 ||
-					score === null ||
-					startYear === null ||
-					itemGenres.length === 0 ||
-					itemThemes.length === 0 ||
-					itemDemographics.length === 0 ||
-					(isAnimeSearch &&
-						((item as Anime).episodes === 0 || (item as Anime).episodes === null)) ||
-					(!isAnimeSearch &&
-						((item as Manga).chapters === 0 || (item as Manga).chapters === null)) ||
-					(!isAnimeSearch &&
-						((item as Manga).volumes === 0 || (item as Manga).volumes === null))
+					startYear &&
+					(startYear < filters.startYearRange[0] || startYear > filters.startYearRange[1])
+				)
+					return false;
+
+				// Case-insensitive comparison for genres, themes, and demographics
+				if (
+					filters.genres.length > 0 &&
+					!filters.genres.some((genre: string) =>
+						itemGenres.map((g: string) => g.toLowerCase()).includes(genre.toLowerCase())
+					)
 				) {
 					return false;
 				}
-			}
 
-			if (score < filters.scoreRange[0] || score > filters.scoreRange[1]) return false;
-			if (
-				startYear &&
-				(startYear < filters.startYearRange[0] || startYear > filters.startYearRange[1])
-			)
-				return false;
-
-			// Case-insensitive comparison for genres, themes, and demographics
-			if (
-				filters.genres.length > 0 &&
-				!filters.genres.some((genre: string) =>
-					itemGenres.map((g: string) => g.toLowerCase()).includes(genre.toLowerCase())
-				)
-			) {
-				return false;
-			}
-
-			if (
-				filters.themes.length > 0 &&
-				!filters.themes.some((theme: string) =>
-					itemThemes.map((t: string) => t.toLowerCase()).includes(theme.toLowerCase())
-				)
-			) {
-				return false;
-			}
-
-			if (
-				filters.demographics.length > 0 &&
-				!filters.demographics.some((demo: string) =>
-					itemDemographics
-						.map((d: string) => d.toLowerCase())
-						.includes(demo.toLowerCase())
-				)
-			) {
-				return false;
-			}
-
-			// Handle multiple selections for startSeason, status, and type
-			if (
-				Array.isArray(filters.startSeason) &&
-				filters.startSeason.length > 0 &&
-				!filters.startSeason.some(
-					(season: string) =>
-						(item as Anime).start_season?.toLowerCase() === season.toLowerCase()
-				)
-			) {
-				return false;
-			}
-
-			if (
-				Array.isArray(filters.status) &&
-				filters.status.length > 0 &&
-				!filters.status.some(
-					(status: string) => item.status?.toLowerCase() === status.toLowerCase()
-				)
-			) {
-				return false;
-			}
-
-			if (
-				Array.isArray(filters.type) &&
-				filters.type.length > 0 &&
-				!filters.type.some(
-					(type: string) => item.type?.toLowerCase() === type.toLowerCase()
-				)
-			) {
-				return false;
-			}
-
-			// Check episodes range for Anime
-			if (isAnimeSearch) {
-				const episodes = (item as Anime).episodes || 0;
-				const [minEpisodes, maxEpisodes] = filters.episodesRange[0];
-				if (episodes < minEpisodes || episodes > maxEpisodes) {
-					return false;
-				}
-			}
-
-			// Check chapters and volumes range for Manga
-			if (!isAnimeSearch) {
-				const chapters = (item as Manga).chapters || 0;
-				const volumes = (item as Manga).volumes || 0;
-				const [minChapters, maxChapters] = filters.chaptersRange;
-				const [minVolumes, maxVolumes] = filters.volumesRange;
-
-				if (chapters < minChapters || chapters > maxChapters) {
+				if (
+					filters.themes.length > 0 &&
+					!filters.themes.some((theme: string) =>
+						itemThemes.map((t: string) => t.toLowerCase()).includes(theme.toLowerCase())
+					)
+				) {
 					return false;
 				}
 
-				if (volumes < minVolumes || volumes > maxVolumes) {
+				if (
+					filters.demographics.length > 0 &&
+					!filters.demographics.some((demo: string) =>
+						itemDemographics
+							.map((d: string) => d.toLowerCase())
+							.includes(demo.toLowerCase())
+					)
+				) {
 					return false;
 				}
-			}
 
-			return true;
-		});
+				// Handle multiple selections for startSeason, status, and type
+				if (
+					Array.isArray(filters.startSeason) &&
+					filters.startSeason.length > 0 &&
+					!filters.startSeason.some(
+						(season: string) =>
+							(item as Anime).start_season?.toLowerCase() === season.toLowerCase()
+					)
+				) {
+					return false;
+				}
 
-		setFilteredResults(filtered as Anime[] | Manga[]);
-	};
+				if (
+					Array.isArray(filters.status) &&
+					filters.status.length > 0 &&
+					!filters.status.some(
+						(status: string) => item.status?.toLowerCase() === status.toLowerCase()
+					)
+				) {
+					return false;
+				}
+
+				if (
+					Array.isArray(filters.type) &&
+					filters.type.length > 0 &&
+					!filters.type.some(
+						(type: string) => item.type?.toLowerCase() === type.toLowerCase()
+					)
+				) {
+					return false;
+				}
+
+				// Check episodes range for Anime
+				if (isAnimeSearch) {
+					const episodes = (item as Anime).episodes || 0;
+					const [minEpisodes, maxEpisodes] = filters.episodesRange[0];
+					if (episodes < minEpisodes || episodes > maxEpisodes) {
+						return false;
+					}
+				}
+
+				// Check chapters and volumes range for Manga
+				if (!isAnimeSearch) {
+					const chapters = (item as Manga).chapters || 0;
+					const volumes = (item as Manga).volumes || 0;
+					const [minChapters, maxChapters] = filters.chaptersRange;
+					const [minVolumes, maxVolumes] = filters.volumesRange;
+
+					if (chapters < minChapters || chapters > maxChapters) {
+						return false;
+					}
+
+					if (volumes < minVolumes || volumes > maxVolumes) {
+						return false;
+					}
+				}
+
+				return true;
+			});
+
+			setFilteredResults(filtered as Anime[] | Manga[]);
+		},
+		[animeResults, mangaResults, isAnimeSearch]
+	);
+
+	useEffect(() => {
+		// Reapply filters whenever results change
+		handleFilterChange(currentFilters);
+	}, [animeResults, currentFilters, handleFilterChange, mangaResults]);
 
 	return (
 		<div className={`min-h-screen transition-colors duration-300 ${isDarkMode ? "dark" : ""}`}>
