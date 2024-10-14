@@ -233,8 +233,8 @@ export function FilterOptions({ isAnimeSearch, isDarkMode, onFilterChange }: Fil
 							<div className="flex items-center space-x-2">
 								<input
 									type="number"
-									min={1950}
-									max={new Date().getFullYear()}
+									min={1917}
+									max={new Date().getFullYear() + 1}
 									step={1}
 									value={filters.startYearRange[0]}
 									onChange={(e) =>
@@ -246,8 +246,8 @@ export function FilterOptions({ isAnimeSearch, isDarkMode, onFilterChange }: Fil
 									className="w-16 p-1 border rounded"
 								/>
 								<Slider
-									min={1950}
-									max={new Date().getFullYear()}
+									min={1917}
+									max={new Date().getFullYear() + 1}
 									step={1}
 									value={filters.startYearRange}
 									onValueChange={(value) =>
@@ -257,8 +257,8 @@ export function FilterOptions({ isAnimeSearch, isDarkMode, onFilterChange }: Fil
 								/>
 								<input
 									type="number"
-									min={1950}
-									max={new Date().getFullYear()}
+									min={1917}
+									max={new Date().getFullYear() + 1}
 									step={1}
 									value={filters.startYearRange[1]}
 									onChange={(e) =>
