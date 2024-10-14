@@ -3,6 +3,8 @@ import { Label } from "@/components/ui/label";
 import { MultiSelect } from "@/components/layout/multi-select";
 import { Slider } from "@/components/ui/slider";
 import { FilterProps } from "@/types/props/Filter";
+import { Calendar, Film } from "lucide-react";
+import { CalendarDays } from "lucide-react";
 
 export function AnimeSpecificFilters({ filters, handleFilterChange, isDarkMode }: FilterProps) {
 	const getEpisodesRange = (): [number, number] => {
@@ -24,6 +26,7 @@ export function AnimeSpecificFilters({ filters, handleFilterChange, isDarkMode }
 		<>
 			<div>
 				<Label className={`${isDarkMode ? "text-gray-300" : "text-gray-700"}`}>
+					<CalendarDays className="w-4 h-4 mr-2 text-green-500" />
 					Start Season
 				</Label>
 				<MultiSelect
@@ -36,12 +39,17 @@ export function AnimeSpecificFilters({ filters, handleFilterChange, isDarkMode }
 					onValueChange={(selected) => handleFilterChange("startSeason", selected)}
 					defaultValue={filters?.startSeason}
 					placeholder="Select seasons"
-					className={`${isDarkMode ? "bg-gray-800 text-white" : "bg-white text-black"}`}
+					className={`${isDarkMode ? "bg-gray-700 text-white" : "bg-white text-black"}`}
 				/>
 			</div>
 
 			<div>
-				<Label className={`${isDarkMode ? "text-gray-300" : "text-gray-700"}`}>
+				<Label
+					className={`${
+						isDarkMode ? "text-gray-300" : "text-gray-700"
+					} flex items-center`}
+				>
+					<Calendar className="w-4 h-4 mr-2 text-blue-500" />
 					Status
 				</Label>
 				<MultiSelect
@@ -53,12 +61,19 @@ export function AnimeSpecificFilters({ filters, handleFilterChange, isDarkMode }
 					onValueChange={(selected) => handleFilterChange("status", selected)}
 					defaultValue={filters?.status}
 					placeholder="Select status"
-					className={`${isDarkMode ? "bg-gray-800 text-white" : "bg-white text-black"}`}
+					className={`${isDarkMode ? "bg-gray-700 text-white" : "bg-white text-black"}`}
 				/>
 			</div>
 
 			<div>
-				<Label className={`${isDarkMode ? "text-gray-300" : "text-gray-700"}`}>Type</Label>
+				<Label
+					className={`${
+						isDarkMode ? "text-gray-300" : "text-gray-700"
+					} flex items-center`}
+				>
+					<Film className="w-4 h-4 mr-2 text-purple-500" />
+					Type
+				</Label>
 				<MultiSelect
 					options={[
 						{ label: "TV", value: "tv" },
@@ -68,14 +83,19 @@ export function AnimeSpecificFilters({ filters, handleFilterChange, isDarkMode }
 					onValueChange={(selected) => handleFilterChange("type", selected)}
 					defaultValue={filters?.type}
 					placeholder="Select type"
-					className={`${isDarkMode ? "bg-gray-800 text-white" : "bg-white text-black"}`}
+					className={`${isDarkMode ? "bg-gray-700 text-white" : "bg-white text-black"}`}
 				/>
 			</div>
 
 			{/* Episodes Range for TV or OVA */}
 			{(filters?.type.includes("tv") || filters?.type.includes("ova")) && (
 				<div>
-					<Label className={`${isDarkMode ? "text-gray-300" : "text-gray-700"}`}>
+					<Label
+						className={`${
+							isDarkMode ? "text-gray-300" : "text-gray-700"
+						} flex items-center`}
+					>
+						<Film className="w-4 h-4 mr-2 text-purple-500" />
 						Episodes Range
 					</Label>
 					<div className="flex items-center space-x-2">
@@ -91,7 +111,7 @@ export function AnimeSpecificFilters({ filters, handleFilterChange, isDarkMode }
 									getEpisodesRange()[1],
 								])
 							}
-							className="w-16 p-1 border rounded"
+							className="w-16 p-1 border rounded text-gray-900"
 						/>
 						<Slider
 							min={0}
@@ -115,7 +135,7 @@ export function AnimeSpecificFilters({ filters, handleFilterChange, isDarkMode }
 									parseInt(e.target.value, 10),
 								])
 							}
-							className="w-16 p-1 border rounded"
+							className="w-16 p-1 border rounded text-gray-900"
 						/>
 					</div>
 					<div

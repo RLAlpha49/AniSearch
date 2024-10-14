@@ -6,6 +6,7 @@ import {
 	AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { FilterOptionsProps } from "@/types/props/FilterOptions";
 import { FilterNotice } from "./FilterNotice";
 import { ScoreRangeFilter } from "./ScoreRangeFilter";
@@ -14,21 +15,14 @@ import { AnimeSpecificFilters } from "./AnimeSpecificFilters";
 import { MangaSpecificFilters } from "./MangaSpecificFilters";
 import { MultiSelectFilter } from "./MultiSelectFilter";
 import { IgnoreNAFilter } from "./IgnoreNAFilter";
+import { Sliders, Tag, Calendar, SwatchBook, Users } from "lucide-react";
 
 const genreOptions = [
 	{ label: "Action", value: "action" },
 	{ label: "Adventure", value: "adventure" },
-	{ label: "Award Winning", value: "award-winning" },
-	{ label: "Avant Garde", value: "avant-garde" },
-	{ label: "Boys Love", value: "boys-love" },
 	{ label: "Comedy", value: "comedy" },
 	{ label: "Drama", value: "drama" },
-	{ label: "Ecchi", value: "ecchi" },
-	{ label: "Erotica", value: "erotica" },
 	{ label: "Fantasy", value: "fantasy" },
-	{ label: "Girls Love", value: "girls-love" },
-	{ label: "Gourmet", value: "gourmet" },
-	{ label: "Hentai", value: "hentai" },
 	{ label: "Horror", value: "horror" },
 	{ label: "Mystery", value: "mystery" },
 	{ label: "Romance", value: "romance" },
@@ -36,66 +30,24 @@ const genreOptions = [
 	{ label: "Slice of Life", value: "slice-of-life" },
 	{ label: "Sports", value: "sports" },
 	{ label: "Supernatural", value: "supernatural" },
-	{ label: "Suspense", value: "suspense" },
 ];
 
 const themeOptions = [
-	{ label: "Adult Cast", value: "adult-cast" },
-	{ label: "Anthropomorphic", value: "anthropomorphic" },
-	{ label: "CGDCT", value: "cgdct" },
-	{ label: "Childcare", value: "childcare" },
-	{ label: "Combat Sports", value: "combat-sports" },
-	{ label: "Crossdressing", value: "crossdressing" },
-	{ label: "Delinquents", value: "delinquents" },
-	{ label: "Detective", value: "detective" },
-	{ label: "Educational", value: "educational" },
-	{ label: "Gag Humor", value: "gag-humor" },
-	{ label: "Gore", value: "gore" },
-	{ label: "Harem", value: "harem" },
-	{ label: "High Stakes Game", value: "high-stakes-game" },
-	{ label: "Historical", value: "historical" },
-	{ label: "Isekai", value: "isekai" },
-	{ label: "Iyashikei", value: "iyashikei" },
-	{ label: "Love Polygon", value: "love-polygon" },
-	{ label: "Magical Sex Shift", value: "magical-sex-shift" },
-	{ label: "Mahou Shoujo", value: "mahou-shoujo" },
-	{ label: "Martial Arts", value: "martial-arts" },
-	{ label: "Mecha", value: "mecha" },
-	{ label: "Medical", value: "medical" },
-	{ label: "Military", value: "military" },
-	{ label: "Music", value: "music" },
-	{ label: "Mythology", value: "mythology" },
-	{ label: "Organized Crime", value: "organized-crime" },
-	{ label: "Otaku Culture", value: "otaku-culture" },
-	{ label: "Parody", value: "parody" },
-	{ label: "Performing Arts", value: "performing-arts" },
-	{ label: "Pets", value: "pets" },
-	{ label: "Psychological", value: "psychological" },
-	{ label: "Racing", value: "racing" },
-	{ label: "Reincarnation", value: "reincarnation" },
-	{ label: "Reverse Harem", value: "reverse-harem" },
-	{ label: "Romantic Subtext", value: "romantic-subtext" },
-	{ label: "Samurai", value: "samurai" },
 	{ label: "School", value: "school" },
-	{ label: "Showbiz", value: "showbiz" },
+	{ label: "Military", value: "military" },
+	{ label: "Psychological", value: "psychological" },
 	{ label: "Space", value: "space" },
-	{ label: "Strategy Game", value: "strategy-game" },
-	{ label: "Super Power", value: "super-power" },
-	{ label: "Survival", value: "survival" },
-	{ label: "Team Sports", value: "team-sports" },
 	{ label: "Time Travel", value: "time-travel" },
+	{ label: "Music", value: "music" },
+	{ label: "Mecha", value: "mecha" },
 	{ label: "Vampire", value: "vampire" },
-	{ label: "Video Game", value: "video-game" },
-	{ label: "Visual Arts", value: "visual-arts" },
-	{ label: "Workplace", value: "workplace" },
 ];
 
 const demographicOptions = [
-	{ label: "Josei", value: "josei" },
-	{ label: "Kids", value: "kids" },
-	{ label: "Seinen", value: "seinen" },
-	{ label: "Shoujo", value: "shoujo" },
 	{ label: "Shounen", value: "shounen" },
+	{ label: "Shoujo", value: "shoujo" },
+	{ label: "Seinen", value: "seinen" },
+	{ label: "Josei", value: "josei" },
 ];
 
 export function FilterOptions({ isAnimeSearch, isDarkMode, onFilterChange }: FilterOptionsProps) {
@@ -125,77 +77,120 @@ export function FilterOptions({ isAnimeSearch, isDarkMode, onFilterChange }: Fil
 		onFilterChange(filters);
 	};
 
+	const getGradientClass = (isDarkMode: boolean) => {
+		return isDarkMode
+			? "bg-gradient-to-r from-purple-900 via-blue-900 to-teal-900 rounded-lg"
+			: "bg-gradient-to-r from-purple-100 via-blue-100 to-teal-100 rounded-lg";
+	};
+
 	return (
 		<Accordion type="single" collapsible className="w-full mb-4">
-			<AccordionItem value="filters">
-				<AccordionTrigger className={`${isDarkMode ? "text-white" : "text-black"}`}>
+			<AccordionItem value="filters" className={getGradientClass(isDarkMode)}>
+				<AccordionTrigger
+					className={`${
+						isDarkMode ? "text-white" : "text-black"
+					} text-lg font-semibold p-4 rounded-t-lg`}
+				>
+					<Sliders className="w-5 h-5 mr-2" />
 					Filter Options
 				</AccordionTrigger>
-				<AccordionContent>
-					<div className="space-y-4">
-						<FilterNotice isDarkMode={isDarkMode} />
-						<ScoreRangeFilter
-							filters={filters}
-							handleFilterChange={handleFilterChange}
-							isDarkMode={isDarkMode}
-							label={""}
-							options={[]}
-							selected={[]}
-						/>
-						<StartYearRangeFilter
-							filters={filters}
-							handleFilterChange={handleFilterChange}
-							isDarkMode={isDarkMode}
-						/>
-						{isAnimeSearch && (
-							<AnimeSpecificFilters
-								filters={filters}
-								handleFilterChange={handleFilterChange}
-								isDarkMode={isDarkMode}
-							/>
-						)}
-						{!isAnimeSearch && (
-							<MangaSpecificFilters
-								filters={filters}
-								handleFilterChange={handleFilterChange}
-								isDarkMode={isDarkMode}
-							/>
-						)}
-						<MultiSelectFilter
-							label="Genres"
-							options={genreOptions}
-							selected={filters.genres}
-							handleFilterChange={handleFilterChange}
-							isDarkMode={isDarkMode}
-						/>
-						<MultiSelectFilter
-							label="Themes"
-							options={themeOptions}
-							selected={filters.themes}
-							handleFilterChange={handleFilterChange}
-							isDarkMode={isDarkMode}
-						/>
-						<MultiSelectFilter
-							label="Demographics"
-							options={demographicOptions}
-							selected={filters.demographics}
-							handleFilterChange={handleFilterChange}
-							isDarkMode={isDarkMode}
-						/>
-						<IgnoreNAFilter
-							filters={filters}
-							handleFilterChange={handleFilterChange}
-							isDarkMode={isDarkMode}
-						/>
-						<Button
-							onClick={applyFilters}
-							className={`${
-								isDarkMode ? "bg-gray-700 text-white" : "bg-gray-200 text-black"
-							}`}
-						>
-							Apply Filters
-						</Button>
-					</div>
+				<AccordionContent className={`p-0`}>
+					<Card className={`${isDarkMode ? "bg-gray-800" : "bg-white"} p-4 rounded-b-lg`}>
+						<CardContent className="space-y-6">
+							<FilterNotice isDarkMode={isDarkMode} />
+
+							<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+								<div className="space-y-4">
+									<h3
+										className={`${
+											isDarkMode ? "text-white" : "text-black"
+										} text-lg font-semibold flex items-center`}
+									>
+										<Calendar className="w-5 h-5 mr-2 text-blue-500" />
+										General Filters
+									</h3>
+									<ScoreRangeFilter
+										filters={filters}
+										handleFilterChange={handleFilterChange}
+										isDarkMode={isDarkMode}
+									/>
+									<StartYearRangeFilter
+										filters={filters}
+										handleFilterChange={handleFilterChange}
+										isDarkMode={isDarkMode}
+									/>
+									{isAnimeSearch ? (
+										<AnimeSpecificFilters
+											filters={filters}
+											handleFilterChange={handleFilterChange}
+											isDarkMode={isDarkMode}
+										/>
+									) : (
+										<MangaSpecificFilters
+											filters={filters}
+											handleFilterChange={handleFilterChange}
+											isDarkMode={isDarkMode}
+										/>
+									)}
+								</div>
+
+								<div className="space-y-4">
+									<h3
+										className={`${
+											isDarkMode ? "text-white" : "text-black"
+										} text-lg font-semibold flex items-center`}
+									>
+										<Tag className="w-5 h-5 mr-2 text-green-500" />
+										Categories
+									</h3>
+									<MultiSelectFilter
+										label="Genres"
+										options={genreOptions}
+										selected={filters.genres}
+										handleFilterChange={handleFilterChange}
+										isDarkMode={isDarkMode}
+										icon={<Tag className="w-4 h-4 mr-2 text-green-500" />}
+									/>
+									<MultiSelectFilter
+										label="Themes"
+										options={themeOptions}
+										selected={filters.themes}
+										handleFilterChange={handleFilterChange}
+										isDarkMode={isDarkMode}
+										icon={
+											<SwatchBook className="w-4 h-4 mr-2 text-purple-500" />
+										}
+									/>
+									<MultiSelectFilter
+										label="Demographics"
+										options={demographicOptions}
+										selected={filters.demographics}
+										handleFilterChange={handleFilterChange}
+										isDarkMode={isDarkMode}
+										icon={<Users className="w-4 h-4 mr-2 text-blue-500" />}
+									/>
+								</div>
+							</div>
+
+							<div className="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-gray-700">
+								<IgnoreNAFilter
+									filters={filters}
+									handleFilterChange={handleFilterChange}
+									isDarkMode={isDarkMode}
+								/>
+								<Button
+									onClick={applyFilters}
+									className={`${
+										isDarkMode
+											? "bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+											: "bg-gradient-to-r from-blue-400 to-purple-400 hover:from-blue-500 hover:to-purple-500"
+									} text-white font-bold py-2 px-4 rounded-full transition-all duration-300 transform hover:scale-105`}
+								>
+									Apply Filters
+								</Button>
+							</div>
+						</CardContent>
+					</Card>
 				</AccordionContent>
 			</AccordionItem>
 		</Accordion>
