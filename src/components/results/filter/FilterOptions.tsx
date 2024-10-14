@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import {
 	Accordion,
 	AccordionContent,
 	AccordionItem,
 	AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { FilterOptionsProps } from "@/types/props/FilterOptions";
 import { FilterNotice } from "./FilterNotice";
@@ -50,31 +49,14 @@ const demographicOptions = [
 	{ label: "Josei", value: "josei" },
 ];
 
-export function FilterOptions({ isAnimeSearch, isDarkMode, onFilterChange }: FilterOptionsProps) {
-	const [filters, setFilters] = useState({
-		scoreRange: [0, 10],
-		startYearRange: [1917, 2025],
-		genres: [] as string[],
-		themes: [] as string[],
-		demographics: [] as string[],
-		status: [] as string[],
-		type: [] as string[],
-		episodesRange: [
-			[0, 3057],
-			[0, 110],
-		],
-		chaptersRange: [0, 6477],
-		volumesRange: [0, 200],
-		startSeason: [] as string[],
-		ignoreNA: true,
-	});
-
+export function FilterOptions({
+	isAnimeSearch,
+	isDarkMode,
+	filters,
+	setFilters,
+}: FilterOptionsProps) {
 	const handleFilterChange = (key: string, value: unknown) => {
 		setFilters((prev) => ({ ...prev, [key]: value }));
-	};
-
-	const applyFilters = () => {
-		onFilterChange(filters);
 	};
 
 	const getGradientClass = (isDarkMode: boolean) => {
@@ -178,16 +160,6 @@ export function FilterOptions({ isAnimeSearch, isDarkMode, onFilterChange }: Fil
 									handleFilterChange={handleFilterChange}
 									isDarkMode={isDarkMode}
 								/>
-								<Button
-									onClick={applyFilters}
-									className={`${
-										isDarkMode
-											? "bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
-											: "bg-gradient-to-r from-blue-400 to-purple-400 hover:from-blue-500 hover:to-purple-500"
-									} text-white font-bold py-2 px-4 rounded-full transition-all duration-300 transform hover:scale-105`}
-								>
-									Apply Filters
-								</Button>
 							</div>
 						</CardContent>
 					</Card>

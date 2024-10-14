@@ -70,7 +70,9 @@ export default function AniSearchComponent() {
 			endpoint: "https://model.alpha49.com/anisearchmodel/",
 		};
 	});
-	const [currentFilters, setCurrentFilters] = useState<Filters>({
+
+	// Separate filter states for anime and manga
+	const [animeFilters, setAnimeFilters] = useState<Filters>({
 		scoreRange: [0, 10],
 		startYearRange: [1917, 2025],
 		genres: [] as string[],
@@ -87,6 +89,27 @@ export default function AniSearchComponent() {
 		startSeason: [] as string[],
 		ignoreNA: true,
 	});
+
+	const [mangaFilters, setMangaFilters] = useState<Filters>({
+		scoreRange: [0, 10],
+		startYearRange: [1917, 2025],
+		genres: [] as string[],
+		themes: [] as string[],
+		demographics: [] as string[],
+		status: [] as string[],
+		type: [] as string[],
+		episodesRange: [
+			[0, 3057],
+			[0, 110],
+		],
+		chaptersRange: [0, 6477],
+		volumesRange: [0, 200],
+		startSeason: [] as string[],
+		ignoreNA: true,
+	});
+
+	const currentFilters = isAnimeSearch ? animeFilters : mangaFilters;
+	const setCurrentFilters = isAnimeSearch ? setAnimeFilters : setMangaFilters;
 
 	useEffect(() => {
 		if (typeof window !== "undefined") {
@@ -220,7 +243,12 @@ export default function AniSearchComponent() {
 
 	const handleFilterChange = useCallback(
 		(filters: Filters) => {
-			setCurrentFilters(filters);
+			if (isAnimeSearch) {
+				setAnimeFilters(filters);
+			} else {
+				setMangaFilters(filters);
+			}
+
 			const results = isAnimeSearch ? animeResults : mangaResults;
 			const filtered = results.filter((item: Anime | Manga) => {
 				const score = item.score || 0;
@@ -411,7 +439,8 @@ export default function AniSearchComponent() {
 					<FilterOptions
 						isAnimeSearch={isAnimeSearch}
 						isDarkMode={isDarkMode}
-						onFilterChange={handleFilterChange}
+						filters={currentFilters}
+						setFilters={setCurrentFilters}
 					/>
 					<ErrorDisplay error={error} />
 					<ResultsList

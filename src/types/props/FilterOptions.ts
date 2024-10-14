@@ -1,7 +1,9 @@
 import { Filters } from "../Filters";
+import React from "react";
 
 export interface FilterOptionsProps {
 	isAnimeSearch: boolean;
 	isDarkMode: boolean;
-	onFilterChange: (filters: Filters) => void;
+	filters: Filters;
+	setFilters: React.Dispatch<React.SetStateAction<Filters>>;
 }
