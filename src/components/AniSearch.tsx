@@ -35,6 +35,7 @@ const models = [
 	"sentence-t5-base",
 	"sentence-t5-large",
 	"sentence-t5-xl",
+	"toobi/anime",
 ];
 
 export default function AniSearchComponent() {
@@ -188,13 +189,14 @@ export default function AniSearchComponent() {
 			}
 			setError(null);
 			const endpoint = isAnimeSearch ? "anime" : "manga";
+			const model = currentModel === "toobi/anime" ? currentModel : `sentence-transformers/${currentModel}`;
 			const response = await fetch(`${settings.endpoint}${endpoint}`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
 				},
 				body: JSON.stringify({
-					model: `sentence-transformers/${currentModel}`,
+					model,
 					description: searchQuery,
 					page,
 					resultsPerPage:
