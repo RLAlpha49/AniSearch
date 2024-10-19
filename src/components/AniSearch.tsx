@@ -35,7 +35,9 @@ const models = [
 	"sentence-t5-base",
 	"sentence-t5-large",
 	"sentence-t5-xl",
+	"sentence-t5-xxl",
 	"toobi/anime",
+	"fine_tuned_sbert_anime_model"
 ];
 
 export default function AniSearchComponent() {
