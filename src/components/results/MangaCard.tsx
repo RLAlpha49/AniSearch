@@ -1,5 +1,4 @@
 import React from "react";
-import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { MangaCardProps } from "@/types/props/MangaCard";
 import {
@@ -93,11 +92,11 @@ export function MangaCard({ manga, isDarkMode }: MangaCardProps) {
 			<div className="flex flex-col sm:flex-row flex-grow select-text">
 				<div className="w-full h-80 sm:w-1/3 sm:h-auto relative">
 					{manga.main_picture ? (
-						<Image
+						// eslint-disable-next-line @next/next/no-img-element
+						<img
 							src={manga.main_picture}
 							alt={manga.title}
-							layout="fill"
-							objectFit="cover"
+							className="w-full h-full object-cover"
 						/>
 					) : (
 						<div className="w-full h-full bg-gray-200 flex items-center justify-center">

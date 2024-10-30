@@ -1,5 +1,4 @@
 import React from "react";
-import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { AnimeCardProps } from "@/types/props/AnimeCard";
 import { Star, Tv, Film, Calendar, Tag, Users, CalendarDays, SwatchBook } from "lucide-react";
@@ -76,11 +75,11 @@ export function AnimeCard({ anime, isDarkMode }: AnimeCardProps) {
 			<div className="flex flex-col sm:flex-row flex-grow select-text">
 				<div className="w-full h-96 sm:w-1/3 sm:h-auto relative">
 					{anime.main_picture ? (
-						<Image
+						// eslint-disable-next-line @next/next/no-img-element
+						<img
 							src={anime.main_picture}
 							alt={anime.title}
-							layout="fill"
-							objectFit="cover"
+							className="w-full h-full object-cover"
 						/>
 					) : (
 						<div className="w-full h-full bg-gray-200 flex items-center justify-center">
